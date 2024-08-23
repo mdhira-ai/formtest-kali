@@ -1,16 +1,16 @@
 'use client'
 import { Input } from "@/components/ui/input";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
-const page = () => {
+const Page = () => {
 
-
+  const [res, setres] = useState<any>('')
   function handeleform(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
 
 
-    fetch('/api/user',{
+    fetch('/api/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -19,6 +19,8 @@ const page = () => {
         email: formData.get("Email"),
         password: formData.get("Password")
       })
+    }).then(async res => {
+      setres(await res.json())
     })
 
   }
@@ -47,6 +49,7 @@ const page = () => {
           placeholder="Password"
         />
 
+        {res && <p>{res.message}</p>}
 
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded "
@@ -54,10 +57,11 @@ const page = () => {
         >
           Login
         </button>
+
       </form>
 
     </div>
   );
 }
 
-export default page;
+export default Page;
